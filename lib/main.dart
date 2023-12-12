@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:moviepedia/config/router/app_router.dart';
 import 'package:moviepedia/config/theme/app_theme.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future<void> main() async {
   await dotenv.load(fileName: '.env');
-  runApp(const MainApp());
+  // PROVIDER SCOPE ES QUIEN CONTIENE LA REFERENCIA
+  // A TODOS MIS PROVIDERS DE RIVERPOD
+  runApp(const ProviderScope(child: MainApp()));
 }
 
 class MainApp extends StatelessWidget {
