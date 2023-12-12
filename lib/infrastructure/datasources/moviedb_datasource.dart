@@ -2,6 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:moviepedia/config/constants/environment.dart';
 import 'package:moviepedia/domain/datasources/movies_datasource.dart';
 import 'package:moviepedia/domain/entities/movie.dart';
+import 'package:moviepedia/infrastructure/mappers/movie_mapper.dart';
+import 'package:moviepedia/infrastructure/models/moviedb/moviedb_response.dart';
 
 class MovieDbDatasource extends MoviesDatasource {
   // CLIENTE DE PETICIONES HTTP CONFIGURADO PARA THEMOVIEDB
@@ -15,8 +17,16 @@ class MovieDbDatasource extends MoviesDatasource {
   @override
   Future<List<Movie>> getNowPlaying({int page = 1}) async {
     final response = await dio.get('/movie/now_playing');
-    response.data;
-    final List<Movie> movies = [];
+
+    // RECIBIMOS JSON
+    final movieDBResponse = MovieDbResponse.fromJson(response.data);
+
+    // LO MAPEAMOS Y REGRESAMOS UN LISTADO DE MOVIES
+    // WHERE, SI LA CONDICION ES CIERTA LO DEJA PASAR, SI ES FALSA, NO. TAMBIEN SE PUEDE PONER ENCADENADO EL WHERE
+    final List<Movie> movies = movieDBResponse.results
+        .where((moviedb) => moviedb.posterPath != 'no-poster')
+        .map((moviedb) => MovieMapper.movieDBToEntity(moviedb))
+        .toList();
 
     return movies;
   }
