@@ -22,6 +22,7 @@ class MoviesNotifier extends StateNotifier<List<Movie>> {
     // HACER MODIFICACION AL STATE
     currentPage++;
     final List<Movie> movies = await fetchMoreMovies(page: currentPage);
+
     // REGRESAR UN NUEVO ESTADO
     // CUANDO EL ESTADO CAMBIA RIVERPOD NOTIFICA
     state = [...state, ...movies];
