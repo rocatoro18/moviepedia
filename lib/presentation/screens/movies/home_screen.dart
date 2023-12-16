@@ -39,11 +39,13 @@ class _HomeViewState extends ConsumerState<_HomeView> {
     // ref.watch = OBTENEMOS EL ESTADO DEL PROVIDER
     final nowPlayingMovies = ref.watch(nowPlayingMoviesProvider);
 
-    if (nowPlayingMovies.length == 0) return const CircularProgressIndicator();
+    if (nowPlayingMovies.isEmpty) return const CircularProgressIndicator();
 
     return Column(
       children: [
-        CustomAppBar(),
+        const CustomAppBar(),
+        MoviesSlideShow(movies: nowPlayingMovies)
+        /*
         Expanded(
           child: ListView.builder(
               itemCount: nowPlayingMovies.length,
@@ -51,7 +53,7 @@ class _HomeViewState extends ConsumerState<_HomeView> {
                 final movie = nowPlayingMovies[index];
                 return ListTile(title: Text(movie.title));
               }),
-        ),
+        ),*/
       ],
     );
   }
