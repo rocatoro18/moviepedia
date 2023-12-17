@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:moviepedia/presentation/providers/movies/movies_providers.dart';
+import 'package:moviepedia/presentation/providers/movies/movies_slideshow_provider.dart';
 import 'package:moviepedia/presentation/widgets/widgets.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -37,14 +38,16 @@ class _HomeViewState extends ConsumerState<_HomeView> {
     // ESTAR PENDIENTE DEL ESTADO CON EL WATCH
     // CUANDO YA TENEMOS DATA MOSTRAMOS LAS PELICULAS MEDIANTE EL WATCH
     // ref.watch = OBTENEMOS EL ESTADO DEL PROVIDER
-    final nowPlayingMovies = ref.watch(nowPlayingMoviesProvider);
+    //final nowPlayingMovies = ref.watch(nowPlayingMoviesProvider);
+    final moviesSlideShow = ref.watch(moviesSlideShowProvider);
 
-    if (nowPlayingMovies.isEmpty) return const CircularProgressIndicator();
+    //if (moviesSlideShow.isEmpty) return const CircularProgressIndicator();
 
     return Column(
       children: [
         const CustomAppBar(),
-        MoviesSlideShow(movies: nowPlayingMovies)
+        //if (moviesSlideShow.isEmpty) const CircularProgressIndicator(),
+        if (moviesSlideShow.isNotEmpty) MoviesSlideShow(movies: moviesSlideShow)
         /*
         Expanded(
           child: ListView.builder(
