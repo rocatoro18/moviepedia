@@ -41,7 +41,7 @@ class _HomeViewState extends ConsumerState<_HomeView> {
     // ESTAR PENDIENTE DEL ESTADO CON EL WATCH
     // CUANDO YA TENEMOS DATA MOSTRAMOS LAS PELICULAS MEDIANTE EL WATCH
     // ref.watch = OBTENEMOS EL ESTADO DEL PROVIDER
-    //final nowPlayingMovies = ref.watch(nowPlayingMoviesProvider);
+    final nowPlayingMovies = ref.watch(nowPlayingMoviesProvider);
     final moviesSlideShow = ref.watch(moviesSlideShowProvider);
 
     //if (moviesSlideShow.isEmpty) return const CircularProgressIndicator();
@@ -50,7 +50,13 @@ class _HomeViewState extends ConsumerState<_HomeView> {
       children: [
         const CustomAppBar(),
         //if (moviesSlideShow.isEmpty) const CircularProgressIndicator(),
-        if (moviesSlideShow.isNotEmpty) MoviesSlideShow(movies: moviesSlideShow)
+        //if (moviesSlideShow.isNotEmpty)
+        MoviesSlideShow(movies: moviesSlideShow),
+        MovieHorizontalListview(
+          movies: nowPlayingMovies,
+          title: 'En cines',
+          subTitle: 'Lunes 20',
+        )
         /*
         Expanded(
           child: ListView.builder(
