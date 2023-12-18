@@ -33,6 +33,7 @@ class _HomeViewState extends ConsumerState<_HomeView> {
     super.initState();
     // ESTE ES EL PUENTE, ESTE READ DEL PROVIDER VA A MANDAR LLAMAR LA SIGUIENTE PAGINA
     ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+    ref.read(popularMoviesProvider.notifier).loadNextPage();
   }
 
   @override
@@ -43,6 +44,7 @@ class _HomeViewState extends ConsumerState<_HomeView> {
     // ref.watch = OBTENEMOS EL ESTADO DEL PROVIDER
     final nowPlayingMovies = ref.watch(nowPlayingMoviesProvider);
     final moviesSlideShow = ref.watch(moviesSlideShowProvider);
+    final popularMovies = ref.watch(popularMoviesProvider);
 
     //if (moviesSlideShow.isEmpty) return const CircularProgressIndicator();
 
@@ -82,11 +84,11 @@ class _HomeViewState extends ConsumerState<_HomeView> {
                 },
               ),
               MovieHorizontalListview(
-                movies: nowPlayingMovies,
+                movies: popularMovies,
                 title: 'Populares',
                 //subTitle: 'Lunes 20',
                 loadNextPage: () {
-                  ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+                  ref.read(popularMoviesProvider.notifier).loadNextPage();
                 },
               ),
               MovieHorizontalListview(

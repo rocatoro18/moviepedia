@@ -6,6 +6,15 @@ final nowPlayingMoviesProvider =
     StateNotifierProvider<MoviesNotifier, List<Movie>>((ref) {
   // SOLO TOMAR LA REFERENCIA A LA FUNCION
   final fetchMoreMovies = ref.watch(movieRepositoryProvider).getNowPlaying;
+  // MANDAMOS NUEVO CASO DE USO
+  return MoviesNotifier(fetchMoreMovies: fetchMoreMovies);
+});
+
+final popularMoviesProvider =
+    StateNotifierProvider<MoviesNotifier, List<Movie>>((ref) {
+  // SOLO TOMAR LA REFERENCIA A LA FUNCION
+  final fetchMoreMovies = ref.watch(movieRepositoryProvider).getPopular;
+  // MANDAMOS NUEVO CASO DE USO
   return MoviesNotifier(fetchMoreMovies: fetchMoreMovies);
 });
 
