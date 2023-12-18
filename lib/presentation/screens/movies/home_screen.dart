@@ -46,29 +46,70 @@ class _HomeViewState extends ConsumerState<_HomeView> {
 
     //if (moviesSlideShow.isEmpty) return const CircularProgressIndicator();
 
-    return Column(
-      children: [
-        const CustomAppBar(),
-        //if (moviesSlideShow.isEmpty) const CircularProgressIndicator(),
-        //if (moviesSlideShow.isNotEmpty)
-        MoviesSlideShow(movies: moviesSlideShow),
-        MovieHorizontalListview(
-          movies: nowPlayingMovies,
-          title: 'En cines',
-          subTitle: 'Lunes 20',
-          loadNextPage: () {
-            ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
-          },
+    // CustomScrollView Utilizado cuando se quiera trabajar con Slivers
+    return CustomScrollView(
+      // SLIVER = WIDGET QUE TRABAJA DIRECTAMENTE CON EL SCROLL VIEW
+      slivers: [
+        const SliverAppBar(
+          floating: true,
+          //title: Text('Hola Mundo'),
+          flexibleSpace: FlexibleSpaceBar(
+            title: CustomAppBar(),
+          ),
         ),
-        /*
-        Expanded(
-          child: ListView.builder(
-              itemCount: nowPlayingMovies.length,
-              itemBuilder: (context, index) {
-                final movie = nowPlayingMovies[index];
-                return ListTile(title: Text(movie.title));
-              }),
-        ),*/
+        SliverList(
+            delegate: SliverChildBuilderDelegate((context, index) {
+          return Column(
+            children: [
+              //const CustomAppBar(),
+              //if (moviesSlideShow.isEmpty) const CircularProgressIndicator(),
+              //if (moviesSlideShow.isNotEmpty)
+              MoviesSlideShow(movies: moviesSlideShow),
+              MovieHorizontalListview(
+                movies: nowPlayingMovies,
+                title: 'En cines',
+                subTitle: 'Lunes 20',
+                loadNextPage: () {
+                  ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+                },
+              ),
+              MovieHorizontalListview(
+                movies: nowPlayingMovies,
+                title: 'Proximamente',
+                subTitle: 'En este mes',
+                loadNextPage: () {
+                  ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+                },
+              ),
+              MovieHorizontalListview(
+                movies: nowPlayingMovies,
+                title: 'Populares',
+                //subTitle: 'Lunes 20',
+                loadNextPage: () {
+                  ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+                },
+              ),
+              MovieHorizontalListview(
+                movies: nowPlayingMovies,
+                title: 'Mejores calificadas',
+                subTitle: 'De todos los tiempos',
+                loadNextPage: () {
+                  ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+                },
+              ),
+              const SizedBox(height: 10)
+              /*
+          Expanded(
+            child: ListView.builder(
+                itemCount: nowPlayingMovies.length,
+                itemBuilder: (context, index) {
+                  final movie = nowPlayingMovies[index];
+                  return ListTile(title: Text(movie.title));
+                }),
+          ),*/
+            ],
+          );
+        }, childCount: 1))
       ],
     );
   }
