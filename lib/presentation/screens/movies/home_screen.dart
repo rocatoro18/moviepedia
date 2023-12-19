@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:moviepedia/presentation/providers/movies/initial_loading_provider.dart';
 import 'package:moviepedia/presentation/providers/movies/movies_providers.dart';
 import 'package:moviepedia/presentation/providers/movies/movies_slideshow_provider.dart';
 import 'package:moviepedia/presentation/widgets/widgets.dart';
@@ -40,6 +41,10 @@ class _HomeViewState extends ConsumerState<_HomeView> {
 
   @override
   Widget build(BuildContext context) {
+    final initialLoading = ref.watch(initialLoadingProvider);
+
+    if (initialLoading) return const FullScreenLoader();
+
     // RENDERIZAR DATA
     // ESTAR PENDIENTE DEL ESTADO CON EL WATCH
     // CUANDO YA TENEMOS DATA MOSTRAMOS LAS PELICULAS MEDIANTE EL WATCH
@@ -53,8 +58,9 @@ class _HomeViewState extends ConsumerState<_HomeView> {
     //if (moviesSlideShow.isEmpty) return const CircularProgressIndicator();
 
     // CustomScrollView Utilizado cuando se quiera trabajar con Slivers
-    return const FullScreenLoader();
+    //return const FullScreenLoader();
 
+    // AGREGAR WIDGET VISIBILITY?
     return CustomScrollView(
       // SLIVER = WIDGET QUE TRABAJA DIRECTAMENTE CON EL SCROLL VIEW
       slivers: [
