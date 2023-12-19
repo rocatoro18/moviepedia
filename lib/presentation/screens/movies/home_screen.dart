@@ -34,6 +34,8 @@ class _HomeViewState extends ConsumerState<_HomeView> {
     // ESTE ES EL PUENTE, ESTE READ DEL PROVIDER VA A MANDAR LLAMAR LA SIGUIENTE PAGINA
     ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
     ref.read(popularMoviesProvider.notifier).loadNextPage();
+    ref.read(topRatedMoviesProvider.notifier).loadNextPage();
+    ref.read(upcomingMoviesProvider.notifier).loadNextPage();
   }
 
   @override
@@ -45,6 +47,8 @@ class _HomeViewState extends ConsumerState<_HomeView> {
     final nowPlayingMovies = ref.watch(nowPlayingMoviesProvider);
     final moviesSlideShow = ref.watch(moviesSlideShowProvider);
     final popularMovies = ref.watch(popularMoviesProvider);
+    final topRatedMovies = ref.watch(topRatedMoviesProvider);
+    final upcomingMovies = ref.watch(upcomingMoviesProvider);
 
     //if (moviesSlideShow.isEmpty) return const CircularProgressIndicator();
 
@@ -76,11 +80,11 @@ class _HomeViewState extends ConsumerState<_HomeView> {
                 },
               ),
               MovieHorizontalListview(
-                movies: nowPlayingMovies,
+                movies: upcomingMovies,
                 title: 'Proximamente',
                 subTitle: 'En este mes',
                 loadNextPage: () {
-                  ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+                  ref.read(upcomingMoviesProvider.notifier).loadNextPage();
                 },
               ),
               MovieHorizontalListview(
@@ -92,11 +96,11 @@ class _HomeViewState extends ConsumerState<_HomeView> {
                 },
               ),
               MovieHorizontalListview(
-                movies: nowPlayingMovies,
+                movies: topRatedMovies,
                 title: 'Mejores calificadas',
                 subTitle: 'De todos los tiempos',
                 loadNextPage: () {
-                  ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+                  ref.read(topRatedMoviesProvider.notifier).loadNextPage();
                 },
               ),
               const SizedBox(height: 10)

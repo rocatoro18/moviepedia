@@ -18,6 +18,22 @@ final popularMoviesProvider =
   return MoviesNotifier(fetchMoreMovies: fetchMoreMovies);
 });
 
+final upcomingMoviesProvider =
+    StateNotifierProvider<MoviesNotifier, List<Movie>>((ref) {
+  // SOLO TOMAR LA REFERENCIA A LA FUNCION
+  final fetchMoreMovies = ref.watch(movieRepositoryProvider).getUpcoming;
+  // MANDAMOS NUEVO CASO DE USO
+  return MoviesNotifier(fetchMoreMovies: fetchMoreMovies);
+});
+
+final topRatedMoviesProvider =
+    StateNotifierProvider<MoviesNotifier, List<Movie>>((ref) {
+  // SOLO TOMAR LA REFERENCIA A LA FUNCION
+  final fetchMoreMovies = ref.watch(movieRepositoryProvider).getTopRated;
+  // MANDAMOS NUEVO CASO DE USO
+  return MoviesNotifier(fetchMoreMovies: fetchMoreMovies);
+});
+
 // DEFINIR EL TIPO DE CALLBACK QUE ESPERO
 typedef MovieCallback = Future<List<Movie>> Function({int page});
 
