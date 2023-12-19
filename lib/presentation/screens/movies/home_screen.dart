@@ -53,6 +53,8 @@ class _HomeViewState extends ConsumerState<_HomeView> {
     //if (moviesSlideShow.isEmpty) return const CircularProgressIndicator();
 
     // CustomScrollView Utilizado cuando se quiera trabajar con Slivers
+    return const FullScreenLoader();
+
     return CustomScrollView(
       // SLIVER = WIDGET QUE TRABAJA DIRECTAMENTE CON EL SCROLL VIEW
       slivers: [
