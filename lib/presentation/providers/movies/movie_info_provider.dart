@@ -5,7 +5,8 @@ import 'package:moviepedia/presentation/providers/providers.dart';
 // MovieMapNotifier es nuestro NOTIFIER
 // movieInfoProvider es nuestro PROVIDER
 
-final movieInfoProvider = StateNotifierProvider((ref) {
+final movieInfoProvider =
+    StateNotifierProvider<MovieMapNotifier, Map<String, Movie>>((ref) {
   final fetchMovieInfo = ref.watch(movieRepositoryProvider).getMovieById;
   // REGRESAMOS UNA NUEVA INSTANCIA DEL MOVIE MAP NOTIFIER
   return MovieMapNotifier(getMovie: fetchMovieInfo);
@@ -32,7 +33,7 @@ class MovieMapNotifier extends StateNotifier<Map<String, Movie>> {
 
   Future<void> loadMovie(String movieId) async {
     if (state[movieId] != null) return;
-
+    print('REALIZANDO PETICION HTTP');
     final movie = await getMovie(movieId);
 
     // HACER EL SPREAD PARA GENERAR UN NUEVO ESTADO
