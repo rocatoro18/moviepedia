@@ -36,7 +36,6 @@ class ActorsByMovieNotifier extends StateNotifier<Map<String, List<Actor>>> {
   Future<void> loadActors(String movieId) async {
     if (state[movieId] != null) return;
     final List<Actor> actors = await getActors(movieId);
-
     // HACER EL SPREAD PARA GENERAR UN NUEVO ESTADO
     state = {...state, movieId: actors};
   }
