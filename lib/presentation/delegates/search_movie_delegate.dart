@@ -1,5 +1,6 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
+import 'package:moviepedia/config/helpers/human_formats.dart';
 import 'package:moviepedia/domain/entities/movie.dart';
 
 // TIENE QUE HABER UNA FUNCION QUE CUMPLA ESTA FIRMA
@@ -67,14 +68,14 @@ class _MovieItem extends StatelessWidget {
     final size = MediaQuery.of(context).size;
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       child: Row(
         children: [
           // Image
           SizedBox(
             width: size.width * 0.20,
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(10),
               child: Image.network(
                 movie.posterPath,
                 loadingBuilder: (context, child, loadingProgress) =>
@@ -92,7 +93,19 @@ class _MovieItem extends StatelessWidget {
                 Text(movie.title, style: textStyles.titleMedium),
                 (movie.overview.length > 100)
                     ? Text('${movie.overview.substring(0, 100)}...')
-                    : Text(movie.overview)
+                    : Text(movie.overview),
+                Row(
+                  children: [
+                    Icon(Icons.star_half_rounded,
+                        color: Colors.yellow.shade800),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    Text(HumanFormats.number(movie.voteAverage, 1),
+                        style: textStyles.bodyMedium!
+                            .copyWith(color: Colors.yellow.shade900))
+                  ],
+                )
               ],
             ),
           )
