@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:moviepedia/domain/entities/movie.dart';
 import 'package:moviepedia/presentation/delegates/search_movie_delegate.dart';
 import 'package:moviepedia/presentation/providers/providers.dart';
 
@@ -26,11 +28,18 @@ class CustomAppBar extends ConsumerWidget {
                     onPressed: () {
                       // DELEGATE = ENCARGADO DE MANEJAR LA BUSQUEDA
                       final movieRepository = ref.read(movieRepositoryProvider);
-                      showSearch(
-                          // MANDAMOS LA REFERENCIA A LA FUNCION SIN EJECUTAR
-                          context: context,
-                          delegate: SearchMovieDelegate(
-                              searchMovies: movieRepository.searchMovies));
+                      showSearch<Movie?>(
+                              // MANDAMOS LA REFERENCIA A LA FUNCION SIN EJECUTAR
+                              context: context,
+                              delegate: SearchMovieDelegate(
+                                  searchMovies: movieRepository.searchMovies))
+                          .then((movie) {
+                        // NAVEGAR A LA PELICULA SI ES QUE EXISTE
+                        if (movie != null) {
+                          context.push('/movie/${movie.id}');
+                        }
+                      });
+                      //print(movie?.title);
                     },
                     icon: const Icon(Icons.search))
               ],
