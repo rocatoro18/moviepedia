@@ -17,14 +17,24 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
 
   SearchMovieDelegate({required this.searchMovies});
 
+  void clearStreams() {
+    debouncedMovies.close();
+  }
+
   void _onQueryChanged(String query) {
     print('Query String cambio');
     // SE ESTA LIMPIANDO CADA VEZ QUE LA PERSONA ESCRIBE ALGO SI ESTA ACTIVO LIMPIAR EL DEBOUNCE TIMER
     if (_debounceTimer?.isActive ?? false) _debounceTimer!.cancel();
     // CUANDO SE DEJA DE ESCRIBIR POR 500 MILESIMAS SE EJECUTA EL CALLBACK
-    _debounceTimer = Timer(const Duration(milliseconds: 500), () {
+    _debounceTimer = Timer(const Duration(milliseconds: 500), () async {
       //TODO: Buscar peliculas y emitir al stream
-      print('Buscando peliculas');
+      //print('Buscando peliculas');
+      if (query.isEmpty) {
+        debouncedMovies.add([]);
+        return;
+      }
+      final movies = await searchMovies(query);
+      debouncedMovies.add(movies);
     });
   }
 
@@ -48,7 +58,10 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
   @override
   Widget? buildLeading(BuildContext context) {
     return IconButton(
-        onPressed: () => close(context, null),
+        onPressed: () {
+          clearStreams();
+          close(context, null);
+        },
         icon: const Icon(Icons.arrow_back_ios_new_rounded));
   }
 
@@ -71,7 +84,12 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
               itemCount: movies.length,
               itemBuilder: (context, index) {
                 final movie = movies[index];
-                return _MovieItem(movie: movie, onMovieSelected: close);
+                return _MovieItem(
+                    movie: movie,
+                    onMovieSelected: (context, movie) {
+                      clearStreams();
+                      close(context, movie);
+                    });
               });
         });
   }
