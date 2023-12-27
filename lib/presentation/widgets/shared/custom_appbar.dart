@@ -28,12 +28,18 @@ class CustomAppBar extends ConsumerWidget {
                     onPressed: () {
                       // DELEGATE = ENCARGADO DE MANEJAR LA BUSQUEDA
                       final movieRepository = ref.read(movieRepositoryProvider);
+                      final searchQuery = ref.read(searchQueryProvider);
                       showSearch<Movie?>(
-                              // MANDAMOS LA REFERENCIA A LA FUNCION SIN EJECUTAR
-                              context: context,
-                              delegate: SearchMovieDelegate(
-                                  searchMovies: movieRepository.searchMovies))
-                          .then((movie) {
+                          query: searchQuery,
+                          // MANDAMOS LA REFERENCIA A LA FUNCION SIN EJECUTAR
+                          context: context,
+                          delegate: SearchMovieDelegate(searchMovies: (query) {
+                            // GUARDAR EL QUERY EN EL STATE Y LUEGO LLAMAR AL REPOSITORIO
+                            ref
+                                .read(searchQueryProvider.notifier)
+                                .update((state) => query);
+                            return movieRepository.searchMovies(query);
+                          })).then((movie) {
                         // NAVEGAR A LA PELICULA SI ES QUE EXISTE
                         if (movie != null) {
                           context.push('/movie/${movie.id}');
