@@ -12,10 +12,12 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
   final SearchMoviesCallback searchMovies;
   // BROADCAST = SIRVE PARA TENER MULTIPLES LISTENERS
   StreamController<List<Movie>> debouncedMovies = StreamController.broadcast();
+  final List<Movie> initialMovies;
   // TIMER ME PERMITE A MI DETERMINAR UN PERIODO DE TIEMPO Y TAMBIEN PERMITE LIMPIARLO Y CANCELARLO
   Timer? _debounceTimer;
 
-  SearchMovieDelegate({required this.searchMovies});
+  SearchMovieDelegate(
+      {required this.initialMovies, required this.searchMovies});
 
   void clearStreams() {
     debouncedMovies.close();
@@ -29,10 +31,12 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
     _debounceTimer = Timer(const Duration(milliseconds: 500), () async {
       //TODO: Buscar peliculas y emitir al stream
       //print('Buscando peliculas');
+      /*
       if (query.isEmpty) {
         debouncedMovies.add([]);
         return;
       }
+      */
       final movies = await searchMovies(query);
       debouncedMovies.add(movies);
     });
@@ -75,6 +79,7 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
     _onQueryChanged(query);
     return StreamBuilder(
         //future: searchMovies(query),
+        initialData: initialMovies,
         stream: debouncedMovies.stream,
         builder: (context, snapshot) {
           //print('Realizando Petición');
