@@ -12,12 +12,12 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
   final SearchMoviesCallback searchMovies;
   // BROADCAST = SIRVE PARA TENER MULTIPLES LISTENERS
   StreamController<List<Movie>> debouncedMovies = StreamController.broadcast();
-  final List<Movie> initialMovies;
+  List<Movie> initialMovies;
   // TIMER ME PERMITE A MI DETERMINAR UN PERIODO DE TIEMPO Y TAMBIEN PERMITE LIMPIARLO Y CANCELARLO
   Timer? _debounceTimer;
 
-  SearchMovieDelegate(
-      {required this.initialMovies, required this.searchMovies});
+  SearchMovieDelegate({required this.initialMovies, required this.searchMovies})
+      : super(searchFieldLabel: 'Buscar peliculas');
 
   void clearStreams() {
     debouncedMovies.close();
@@ -38,12 +38,15 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
       }
       */
       final movies = await searchMovies(query);
+      initialMovies = movies;
       debouncedMovies.add(movies);
     });
   }
 
+  /*
   @override
   String get searchFieldLabel => 'Buscar película';
+  */
 
   @override
   List<Widget>? buildActions(BuildContext context) {
@@ -71,7 +74,29 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
 
   @override
   Widget buildResults(BuildContext context) {
-    return const Text('buildResults');
+    //_onQueryChanged(query);
+    return StreamBuilder(
+        initialData: initialMovies,
+        //future: searchMovies(query),
+        //initialData: initialMovies,
+        stream: debouncedMovies.stream,
+        builder: (context, snapshot) {
+          // NO USARfinal tempMovies = debouncedMovies.stream.last;
+          //print('Realizando Petición');
+          final movies = snapshot.data ?? [];
+
+          return ListView.builder(
+              itemCount: movies.length,
+              itemBuilder: (context, index) {
+                final movie = movies[index];
+                return _MovieItem(
+                    movie: movie,
+                    onMovieSelected: (context, movie) {
+                      clearStreams();
+                      close(context, movie);
+                    });
+              });
+        });
   }
 
   @override
