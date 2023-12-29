@@ -50,7 +50,7 @@ class CustomAppBar extends ConsumerWidget {
                           .then((movie) {
                         // NAVEGAR A LA PELICULA SI ES QUE EXISTE
                         if (movie != null) {
-                          context.push('/movie/${movie.id}');
+                          context.push('/home/0/movie/${movie.id}');
                         }
                       });
                       //print(movie?.title);
