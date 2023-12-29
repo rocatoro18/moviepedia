@@ -1,6 +1,5 @@
 import 'package:go_router/go_router.dart';
 import 'package:moviepedia/presentation/screens/screens.dart';
-import 'package:moviepedia/presentation/views/home_views/favorite_views.dart';
 import 'package:moviepedia/presentation/views/views.dart';
 
 final appRouter = GoRouter(initialLocation: '/', routes: [
