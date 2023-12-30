@@ -51,12 +51,26 @@ class MovieScreenState extends ConsumerState<MovieScreen> {
   }
 }
 
-class _CustomSliverAppBar extends StatelessWidget {
+// ESTO EMITIRA UN VALOR BOOLEANO Y PIDE UN VALOR ENTERO COMO ARGUMENTO
+// NOTIFICACION PARA SABER SI LA PELICULA ESTA O NO EN
+// FAVORITOS
+final isFavoriteProvider =
+    FutureProvider.family.autoDispose((ref, int movieId) {
+  // INSTANCIA DEL REPOSITORIO QUE YA TIENE CONFIGURADO EL DATASOURCE
+  final localStorageRepository = ref.watch(localStorageRepositoryProvider);
+  return localStorageRepository
+      .isMovieFavorite(movieId); // SI LA PELICULA ESTA EN FAVORITOS
+});
+
+class _CustomSliverAppBar extends ConsumerWidget {
   final Movie movie;
   const _CustomSliverAppBar({required this.movie});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
+    // REFERENCIA A FUTURE PROVIDER QUE RECIBE EL ARGUMENTO
+    final isFavoriteFuture = ref.watch(isFavoriteProvider(movie.id));
+
     final size = MediaQuery.of(context).size;
     return SliverAppBar(
       backgroundColor: Colors.black,
@@ -65,9 +79,22 @@ class _CustomSliverAppBar extends StatelessWidget {
       actions: [
         IconButton(
             onPressed: () {
-              // REALIZAR EL TOGGLE
+              ref.watch(localStorageRepositoryProvider).toggleFavorite(movie);
+              // LO INVALIDAMOS PARA QUE VUELVA A HACER LA PETICION Y CONFIRME
+              // INVALIDA EL ESTADO DEL PROVIDER Y LO REGRESA A SU ESTADO ORIGINAL
+              ref.invalidate(isFavoriteProvider(movie.id));
             },
-            icon: const Icon(Icons.favorite_border))
+            icon: isFavoriteFuture.when(
+                data: (isFavorite) => isFavorite
+                    ? const Icon(
+                        Icons.favorite_rounded,
+                        color: Colors.red,
+                      )
+                    : const Icon(Icons.favorite_border),
+                error: (_, __) => throw UnimplementedError(),
+                loading: () => const CircularProgressIndicator(strokeWidth: 2))
+            //const Icon(Icons.favorite_border)
+            )
         //icon: const Icon(
         // Icons.favorite_rounded,
         // color: Colors.red,
