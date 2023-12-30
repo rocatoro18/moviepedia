@@ -8,8 +8,8 @@ class LocalStorageRepositoryImpl extends LocalStorageRepository {
   LocalStorageRepositoryImpl(this.datasource);
 
   @override
-  Future<bool> isMovieFavorite(int movidId) {
-    return datasource.isMovieFavorite(movidId);
+  Future<bool> isMovieFavorite(int movieId) {
+    return datasource.isMovieFavorite(movieId);
   }
 
   @override
