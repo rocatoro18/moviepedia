@@ -32,7 +32,7 @@ class StorageMoviesNotifier extends StateNotifier<Map<int, Movie>> {
 
   Future<List<Movie>> loadNextPage() async {
     final movies = await localStorageRepository.loadMovies(
-        offset: page * 10); // TODO: LIMIT 20
+        offset: page * 10, limit: 20); // TODO: LIMIT 20
     page++;
 
     // CONVERSION DE LISTADO A MAPA
@@ -48,5 +48,21 @@ class StorageMoviesNotifier extends StateNotifier<Map<int, Movie>> {
     // REGRESAR PELICULAS QUE VIENEN DE LA PETICION
     // APARTE DE CAMBIAR EL STATE TAMBIEN SE REGRESAN
     return movies;
+  }
+
+  Future<void> toggleFavorite(Movie movie) async {
+    await localStorageRepository.toggleFavorite(movie);
+    // ESTO AVERIGUA SI LA PELICULA EXISTE
+    final bool isMovieInFavorites = state[movie.id] != null;
+
+    // SI LA PELICULA ESTA EN FAVORITOS SE REMUEVE
+    if (isMovieInFavorites) {
+      state.remove(movie.id);
+      // SPREAD DEL STATE PARA RENDERIZAR NUEVAMENTE EL WIDGET
+      state = {...state};
+    } else {
+      // SI LA PELICULA NO ESTA EN FAVORITOS, SE AGREGA
+      state = {...state, movie.id: movie};
+    }
   }
 }

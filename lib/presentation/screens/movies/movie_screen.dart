@@ -78,8 +78,13 @@ class _CustomSliverAppBar extends ConsumerWidget {
       foregroundColor: Colors.white,
       actions: [
         IconButton(
-            onPressed: () {
-              ref.watch(localStorageRepositoryProvider).toggleFavorite(movie);
+            onPressed: () async {
+              // ERROR ref.read(localStorageRepositoryProvider).toggleFavorite(movie);
+              // ESTO ES ASINCRONO, ESPERAMOS A QUE ESTO RESUELVA PARA CONTINUAR, PARA NO
+              // TENER PROBLEMAS EN LA RENDERIZACION DEL CORAZON
+              await ref
+                  .read(favoriteMoviesProvider.notifier)
+                  .toggleFavorite(movie);
               // LO INVALIDAMOS PARA QUE VUELVA A HACER LA PETICION Y CONFIRME
               // INVALIDA EL ESTADO DEL PROVIDER Y LO REGRESA A SU ESTADO ORIGINAL
               ref.invalidate(isFavoriteProvider(movie.id));
