@@ -82,11 +82,13 @@ class _CustomSliverAppBar extends ConsumerWidget {
               // ERROR ref.read(localStorageRepositoryProvider).toggleFavorite(movie);
               // ESTO ES ASINCRONO, ESPERAMOS A QUE ESTO RESUELVA PARA CONTINUAR, PARA NO
               // TENER PROBLEMAS EN LA RENDERIZACION DEL CORAZON
+              // CODIGO ASINCRONO
               await ref
                   .read(favoriteMoviesProvider.notifier)
                   .toggleFavorite(movie);
               // LO INVALIDAMOS PARA QUE VUELVA A HACER LA PETICION Y CONFIRME
               // INVALIDA EL ESTADO DEL PROVIDER Y LO REGRESA A SU ESTADO ORIGINAL
+              // CODIGO SINCRONO
               ref.invalidate(isFavoriteProvider(movie.id));
             },
             icon: isFavoriteFuture.when(
