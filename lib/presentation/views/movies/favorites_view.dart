@@ -29,13 +29,7 @@ class FavoritesViewState extends ConsumerState<FavoritesView> {
     final favoriteMoviesList = favoriteMoviesMap.values.toList();
 
     return Scaffold(
-      body: ListView.builder(
-          itemCount: favoriteMoviesList.length,
-          itemBuilder: (context, index) {
-            return ListTile(
-              title: Text(favoriteMoviesList[index].title),
-            );
-          }),
+      body: MovieMasonry(movies: favoriteMoviesList),
     );
   }
 }
