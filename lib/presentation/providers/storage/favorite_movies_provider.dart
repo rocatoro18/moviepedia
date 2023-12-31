@@ -30,7 +30,7 @@ class StorageMoviesNotifier extends StateNotifier<Map<int, Movie>> {
   final LocalStorageRepository localStorageRepository;
   StorageMoviesNotifier({required this.localStorageRepository}) : super({});
 
-  Future<void> loadNextPage() async {
+  Future<List<Movie>> loadNextPage() async {
     final movies = await localStorageRepository.loadMovies(
         offset: page * 10); // TODO: LIMIT 20
     page++;
@@ -45,6 +45,8 @@ class StorageMoviesNotifier extends StateNotifier<Map<int, Movie>> {
     // SPREAD DEL ESTADO ANTERIOR PARA NOTIFICAR QUE HUBO UN CAMBIO EN EL ESTADO
     state = {...state, ...tempMoviesMap};
 
-    //return movies;
+    // REGRESAR PELICULAS QUE VIENEN DE LA PETICION
+    // APARTE DE CAMBIAR EL STATE TAMBIEN SE REGRESAN
+    return movies;
   }
 }

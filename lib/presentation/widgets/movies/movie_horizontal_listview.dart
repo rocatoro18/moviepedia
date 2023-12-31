@@ -28,6 +28,7 @@ class _MovieHorizontalListviewState extends State<MovieHorizontalListview> {
   void initState() {
     super.initState();
     scrollController.addListener(() {
+      // SI NO SE MANDO EL CALLBACK NO SE HACE NADA
       if (widget.loadNextPage == null) return;
       // COMPROBAR QUE YA SE ESTA CERCAS DEL FINAL DEL LISTVIEW
       if ((scrollController.position.pixels + 200) >=
@@ -40,6 +41,7 @@ class _MovieHorizontalListviewState extends State<MovieHorizontalListview> {
 
   @override
   void dispose() {
+    // UNA VEZ QUE YA NO SE UTILIZA SE LIMPIAR EL CONTROLLER
     scrollController.dispose();
     super.dispose();
   }
@@ -54,6 +56,7 @@ class _MovieHorizontalListviewState extends State<MovieHorizontalListview> {
             _Title(title: widget.title, subTitle: widget.subTitle),
           Expanded(
               child: ListView.builder(
+                  // ENLAZAMOS EL CONTROLLER CON EL SCROLLCONTROLLER
                   controller: scrollController,
                   itemCount: widget.movies.length,
                   scrollDirection: Axis.horizontal,
